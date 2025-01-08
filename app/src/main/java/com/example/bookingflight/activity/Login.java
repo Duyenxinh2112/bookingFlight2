@@ -138,11 +138,18 @@ public class Login extends AppCompatActivity {
     }
 
     private void performLoginWithFingerprint() {
-        Intent intent1 = new Intent(Login.this, Home.class);
-        startActivity(intent1);
-        finish();
-        Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+        String maKH = sessionManager.getMaKH();
+        if (maKH != null) {
+            Intent intent = new Intent(Login.this, Home.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(Login.this, "Đăng nhập bằng vân tay thành công!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(Login.this, "Không tìm thấy thông tin người dùng. Đăng nhập lần đầu bằng email/mật khẩu để thiết lập.", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
 
     private void attemptLogin() {
         String strEmail = editemail.getText().toString().trim();
@@ -265,8 +272,6 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-
-
 
     private void checkIfUserHasPublicKey(String maKH, PublicKeyCheckCallback callback) {
         ApiService.searchFlight.checkIfUserHasPublicKey(maKH)
